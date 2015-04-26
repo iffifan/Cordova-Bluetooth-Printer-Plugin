@@ -95,11 +95,11 @@ public class BluetoothPrinter extends CordovaPlugin {
 				JSONArray json = new JSONArray();
 				for (BluetoothDevice device : pairedDevices) {
 //					Hashtable map = new Hashtable();
-//					map.put("type", device.getType());
-//					map.put("address", device.getAddress());
-//					map.put("name", device.getName());
+					map.put("type", device.getType());
+					map.put("address", device.getAddress());
+					map.put("name", device.getName());
 //					JSONObject jObj = new JSONObject(map);
-					json.put(device.getAddress());
+//					json.put(device.getAddress());
 				}
 				callbackContext.success(json);
 			} else {
