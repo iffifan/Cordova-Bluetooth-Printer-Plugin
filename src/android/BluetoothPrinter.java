@@ -39,6 +39,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		if (action.equals("list")) {
 			listBT(callbackContext);
+            //just test
 			return true;
 		} else if (action.equals("open")) {
 			String name = args.getString(0);
