@@ -43,6 +43,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 			return true;
 		} else if (action.equals("open")) {
 			String address = args.getString(0);
+            callbackContext.success(address);
 			if (findBT(callbackContext, address)) {
 				try {
 					openBT(callbackContext);
