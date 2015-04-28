@@ -43,7 +43,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 			return true;
 		} else if (action.equals("open")) {
 			String name = args.getString(0);
-			if (findBT(callbackContext, name)) {
+			if (findBT(callbackContext, address)) {
 				try {
 					openBT(callbackContext);
 				} catch (IOException e) {
@@ -119,7 +119,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 	}
 
 	// This will find a bluetooth printer device
-	boolean findBT(CallbackContext callbackContext, String name) {
+	boolean findBT(CallbackContext callbackContext, String address) {
 		try {
 			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 			if (mBluetoothAdapter == null) {
@@ -129,16 +129,18 @@ public class BluetoothPrinter extends CordovaPlugin {
 				Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				this.cordova.getActivity().startActivityForResult(enableBluetooth, 0);
 			}
-			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-			if (pairedDevices.size() > 0) {
-				for (BluetoothDevice device : pairedDevices) {
-					// MP300 is the name of the bluetooth printer device
-					if (device.getName().equalsIgnoreCase(name)) {
-						mmDevice = device;
-						return true;
-					}
-				}
-			}
+             mmDevice =  mBluetoothAdapter.getRemoteDevice(address);
+            return true;
+//			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+//			if (pairedDevices.size() > 0) {
+//				for (BluetoothDevice device : pairedDevices) {
+//					// MP300 is the name of the bluetooth printer device
+//					if (device.getName().equalsIgnoreCase(name)) {
+//						mmDevice = device;
+//						return true;
+//					}
+//				}
+//			}
 			Log.d(LOG_TAG, "Bluetooth Device Found: " + mmDevice.getName());
 		} catch (Exception e) {
 			String errMsg = e.getMessage();
@@ -153,7 +155,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 	boolean openBT(CallbackContext callbackContext) throws IOException {
 		try {
 			// Standard SerialPortService ID
-			UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+			UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 			mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
 			mmSocket.connect();
 			mmOutputStream = mmSocket.getOutputStream();
