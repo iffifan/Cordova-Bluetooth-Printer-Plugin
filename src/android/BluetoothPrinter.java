@@ -129,8 +129,11 @@ public class BluetoothPrinter extends CordovaPlugin {
 				Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				this.cordova.getActivity().startActivityForResult(enableBluetooth, 0);
 			}
-             mmDevice =  mBluetoothAdapter.getRemoteDevice(address);
-            return true;
+            BluetoothDevice device =  mBluetoothAdapter.getRemoteDevice(address);
+            if(device.getAddress().equals(address)){
+                mmDevice = device;
+				return true;
+            }
 //			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 //			if (pairedDevices.size() > 0) {
 //				for (BluetoothDevice device : pairedDevices) {
@@ -141,7 +144,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 //					}
 //				}
 //			}
-//			Log.d(LOG_TAG, "Bluetooth Device Found: " + mmDevice.getName());
+			Log.d(LOG_TAG, "Bluetooth Device Found: " + mmDevice.getName());
 		} catch (Exception e) {
 			String errMsg = e.getMessage();
 			Log.e(LOG_TAG, errMsg);
