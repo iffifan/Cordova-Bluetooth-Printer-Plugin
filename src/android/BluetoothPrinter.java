@@ -51,7 +51,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 					e.printStackTrace();
 				}
 			} else {
-				callbackContext.error("Bluetooth Device Not Found: " + name);
+				callbackContext.error("Bluetooth Device Not Found: " + address);
 			}
 			return true;
 		} else if (action.equals("print")) {
