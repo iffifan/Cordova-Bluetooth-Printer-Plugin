@@ -42,18 +42,17 @@ public class BluetoothPrinter extends CordovaPlugin {
             //just test
 			return true;
 		} else if (action.equals("open")) {
-			String address = args.getString(0);
-            callbackContext.success(address);
-//			if (findBT(callbackContext, address)) {
-//				try {
-//					openBT(callbackContext);
-//				} catch (IOException e) {
-//					Log.e(LOG_TAG, e.getMessage());
-//					e.printStackTrace();
-//				}
-//			} else {
-//				callbackContext.error("Bluetooth Device Not Found: " + address);
-//			}
+			String name = args.getString(0);
+			if (findBT(callbackContext, name)) {
+				try {
+					openBT(callbackContext);
+				} catch (IOException e) {
+					Log.e(LOG_TAG, e.getMessage());
+					e.printStackTrace();
+				}
+			} else {
+				callbackContext.error("Bluetooth Device Not Found: " + name);
+			}
 			return true;
 		} else if (action.equals("print")) {
 			try {
@@ -120,7 +119,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 	}
 
 	// This will find a bluetooth printer device
-	boolean findBT(CallbackContext callbackContext, String address) {
+	boolean findBT(CallbackContext callbackContext, String name) {
 		try {
 			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 			if (mBluetoothAdapter == null) {
@@ -130,21 +129,16 @@ public class BluetoothPrinter extends CordovaPlugin {
 				Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				this.cordova.getActivity().startActivityForResult(enableBluetooth, 0);
 			}
-            BluetoothDevice device =  mBluetoothAdapter.getRemoteDevice(address);
-            if(device.getAddress().equals(address)){
-                mmDevice = device;
-				return true;
-            }
-//			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-//			if (pairedDevices.size() > 0) {
-//				for (BluetoothDevice device : pairedDevices) {
-//					// MP300 is the name of the bluetooth printer device
-//					if (device.getName().equalsIgnoreCase(name)) {
-//						mmDevice = device;
-//						return true;
-//					}
-//				}
-//			}
+			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+			if (pairedDevices.size() > 0) {
+				for (BluetoothDevice device : pairedDevices) {
+					// MP300 is the name of the bluetooth printer device
+					if (device.getAddress().equalsIgnoreCase(name)) {
+						mmDevice = device;
+						return true;
+					}
+				}
+			}
 			Log.d(LOG_TAG, "Bluetooth Device Found: " + mmDevice.getName());
 		} catch (Exception e) {
 			String errMsg = e.getMessage();
@@ -159,7 +153,7 @@ public class BluetoothPrinter extends CordovaPlugin {
 	boolean openBT(CallbackContext callbackContext) throws IOException {
 		try {
 			// Standard SerialPortService ID
-			UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+			UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 			mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
 			mmSocket.connect();
 			mmOutputStream = mmSocket.getOutputStream();

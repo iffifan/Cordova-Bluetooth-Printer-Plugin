@@ -5,7 +5,7 @@ var printer = {
       exec(fnSuccess, fnError, "BluetoothPrinter", "list", []);
    },
    open: function(fnSuccess, fnError, name){
-      exec(fnSuccess, fnError, "BluetoothPrinter", "open", [address]);
+      exec(fnSuccess, fnError, "BluetoothPrinter", "open", [name]);
    },
    close: function(fnSuccess, fnError){
       exec(fnSuccess, fnError, "BluetoothPrinter", "close", []);
