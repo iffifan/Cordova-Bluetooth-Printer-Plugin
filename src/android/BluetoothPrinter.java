@@ -168,16 +168,21 @@ public class BluetoothPrinter extends CordovaPlugin {
 				Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				this.cordova.getActivity().startActivityForResult(enableBluetooth, 0);
 			}
-			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-			if (pairedDevices.size() > 0) {
-				for (BluetoothDevice device : pairedDevices) {
-					// MP300 is the name of the bluetooth printer device
-					if (device.getAddress().equalsIgnoreCase(name)) {
-						mmDevice = device;
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(name);
+            if(device.getAddress().equals(name)){
+                mmDevice = device;
 						return true;
-					}
-				}
-			}
+            }
+//			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+//			if (pairedDevices.size() > 0) {
+//				for (BluetoothDevice device : pairedDevices) {
+//					// MP300 is the name of the bluetooth printer device
+//					if (device.getAddress().equalsIgnoreCase(name)) {
+//						mmDevice = device;
+//						return true;
+//					}
+//				}
+//			}
 			Log.d(LOG_TAG, "Bluetooth Device Found: " + mmDevice.getName());
 		} catch (Exception e) {
 			String errMsg = e.getMessage();
